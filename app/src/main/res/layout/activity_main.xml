@@ -45,31 +45,36 @@
         android:id="@+id/tv_Latitude"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="32dp"
         android:text="Latitude: "
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="@+id/tv_NetworkQuantity"
-        app:layout_constraintTop_toBottomOf="@+id/tv_NetworkQuantity"
-        android:layout_margin="16dp"/>
+        app:layout_constraintTop_toBottomOf="@+id/tv_NetworkQuantity" />
 
     <TextView
         android:id="@+id/tv_Longitude"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:layout_marginTop="56dp"
         android:text="Longitude: "
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="@+id/tv_Latitude"
-        app:layout_constraintTop_toBottomOf="@id/tv_Latitude"
-        android:layout_margin="16dp"/>
+        app:layout_constraintTop_toBottomOf="@id/tv_Latitude" />
 
     <TextView
         android:id="@+id/tv_eventTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="120dp"
         android:text="EventTime: "
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="@+id/tv_Longitude"
-        app:layout_constraintTop_toBottomOf="@id/tv_Longitude"
-        android:layout_margin="16dp"/>
+        app:layout_constraintTop_toBottomOf="@id/tv_Longitude" />
 
     <TextView
         android:id="@+id/tv_Tac"
