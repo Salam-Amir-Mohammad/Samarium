@@ -1,6 +1,9 @@
 package com.example.myapplication.database
 
 import androidx.room.PrimaryKey
+import androidx.room.Entity
+
+@Entity(tableName = "network_info")
 data class NetworkInfo(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val eventTime: Long,
@@ -16,5 +19,5 @@ data class NetworkInfo(
     val rsrp: Int?,
     val rscp: Int?,
     val ecNo: Int?,
-    val situation: String
+    val qualityOfService: String
 )

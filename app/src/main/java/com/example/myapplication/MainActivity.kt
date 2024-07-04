@@ -1,5 +1,6 @@
 package com.example.myapplication
 
+
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
@@ -14,6 +15,12 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
+import com.example.myapplication.database.AppDatabase
+import com.example.myapplication.database.NetworkInfo
+import kotlinx.coroutines.launch
+import android.telephony.CellInfoWcdma
+import android.telephony.CellSignalStrengthWcdma
 
 class MainActivity : AppCompatActivity(), LocationListener {
 
@@ -31,6 +38,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
 
     private lateinit var locationManager: LocationManager
     private lateinit var telephonyManager: TelephonyManager
+    private lateinit var database: AppDatabase
 
     companion object {
         private const val PERMISSION_REQUEST_CODE = 1
@@ -55,6 +63,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
 
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         telephonyManager = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+        database = AppDatabase.getDatabase(this)
 
         if (!hasRequiredPermissions()) {
             requestPermissions()
@@ -70,7 +79,12 @@ class MainActivity : AppCompatActivity(), LocationListener {
             Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.READ_PHONE_STATE
         )
-        return permissions.all { ContextCompat.checkSelfPermission(this, it) == PackageManager.PERMISSION_GRANTED }
+        return permissions.all {
+            ContextCompat.checkSelfPermission(
+                this,
+                it
+            ) == PackageManager.PERMISSION_GRANTED
+        }
     }
 
     private fun requestPermissions() {
@@ -88,8 +102,18 @@ class MainActivity : AppCompatActivity(), LocationListener {
     @RequiresApi(Build.VERSION_CODES.P)
     private fun startLocationUpdates() {
         if (hasRequiredPermissions()) {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, LOCATION_UPDATE_INTERVAL, 0f, this)
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, LOCATION_UPDATE_INTERVAL, 0f, this)
+            locationManager.requestLocationUpdates(
+                LocationManager.GPS_PROVIDER,
+                LOCATION_UPDATE_INTERVAL,
+                0f,
+                this
+            )
+            locationManager.requestLocationUpdates(
+                LocationManager.NETWORK_PROVIDER,
+                LOCATION_UPDATE_INTERVAL,
+                0f,
+                this
+            )
             eventTime.text = "Event Time: ${System.currentTimeMillis()}"
         }
     }
@@ -149,7 +173,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
             rsrp = networkQuality.toIntOrNull(),
             rscp = null,
             ecNo = null,
-            situation = "stationary" // Replace with actual situation
+            qualityOfService = calculateQualityOfService(networkQuality) // Replace with actual situation
         ))
     }
 
@@ -162,7 +186,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
         val cellId = cellIdentityWcdma.cid?.toString()
         val networkType = "3G (WCDMA)"
         val networkQuantity = cellSignalStrengthWcdma.dbm.toString()
-        val networkQuality = cellSignalStrengthWcdma.ecno.toString()
+        val networkQuality = cellSignalStrengthWcdma.dbm.toString()
 
         tvPLMNID.text = "PLMN-ID: $plmnId"
         tvLac.text = "LAC: $lac"
@@ -185,7 +209,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
             rsrp = null,
             rscp = networkQuantity.toIntOrNull(),
             ecNo = networkQuality.toIntOrNull(),
-            situation = "stationary" // Replace with actual situation
+            qualityOfService = calculateQualityOfService(networkQuality) // Replace with actual situation
         ))
     }
 
@@ -220,8 +244,24 @@ class MainActivity : AppCompatActivity(), LocationListener {
             rsrp = null,
             rscp = null,
             ecNo = null,
-            situation = "stationary" // Replace with actual situation
+            qualityOfService = calculateQualityOfService(networkQuantity) // Replace with actual situation
         ))
+    }
+
+    private fun calculateQualityOfService(signalStrength: String): String {
+        return when {
+            signalStrength.toIntOrNull() != null -> {
+                val strength = signalStrength.toInt()
+                when {
+                    strength >= -80 -> "Excellent"
+                    strength >= -95 -> "Good"
+                    strength >= -110 -> "Fair"
+                    strength >= -125 -> "Poor"
+                    else -> "Very Poor"
+                }
+            }
+            else -> "Unknown"
+        }
     }
 
     private fun storeNetworkInfo(networkInfo: NetworkInfo) {
@@ -237,15 +277,15 @@ class MainActivity : AppCompatActivity(), LocationListener {
     }
 
     @RequiresApi(Build.VERSION_CODES.P)
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == PERMISSION_REQUEST_CODE && grantResults.isNotEmpty() && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
             startLocationUpdates()
             displayNetworkInfo()
         }
     }
-
-//    override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
-//    override fun onProviderEnabled(provider: String) {}
-//    override fun onProviderDisabled(provider: String) {}
 }
