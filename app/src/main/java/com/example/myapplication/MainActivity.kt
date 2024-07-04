@@ -1,6 +1,5 @@
 package com.example.myapplication
 
-
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
@@ -15,8 +14,6 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import android.telephony.*
-
 
 class MainActivity : AppCompatActivity(), LocationListener {
 
@@ -25,6 +22,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
     private lateinit var tvNetworkQuantity: TextView
     private lateinit var tvLatitude: TextView
     private lateinit var tvLongitude: TextView
+    private lateinit var eventTime: TextView
     private lateinit var tvTac: TextView
     private lateinit var tvLac: TextView
     private lateinit var tvRac: TextView
@@ -48,6 +46,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
         tvNetworkQuantity = findViewById(R.id.tv_NetworkQuantity)
         tvLatitude = findViewById(R.id.tv_Latitude)
         tvLongitude = findViewById(R.id.tv_Longitude)
+        eventTime = findViewById(R.id.tv_eventTime)
         tvTac = findViewById(R.id.tv_Tac)
         tvLac = findViewById(R.id.tv_Lac)
         tvRac = findViewById(R.id.tv_Rac)
@@ -56,6 +55,13 @@ class MainActivity : AppCompatActivity(), LocationListener {
 
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         telephonyManager = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+
+        if (!hasRequiredPermissions()) {
+            requestPermissions()
+        } else {
+            startLocationUpdates()
+            displayNetworkInfo()
+        }
     }
 
     private fun hasRequiredPermissions(): Boolean {
@@ -84,6 +90,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
         if (hasRequiredPermissions()) {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, LOCATION_UPDATE_INTERVAL, 0f, this)
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, LOCATION_UPDATE_INTERVAL, 0f, this)
+            eventTime.text = "Event Time: ${System.currentTimeMillis()}"
         }
     }
 
@@ -118,8 +125,8 @@ class MainActivity : AppCompatActivity(), LocationListener {
         tvCellId.text = "Cell ID: ${cellIdentityLte.ci}"
         tvNetworkType.text = "4G (LTE)"
 
-        tvNetworkQuantity.text = "RSRQ: ${cellSignalStrengthLte.rsrq}, RSRP: ${cellSignalStrengthLte.rsrp}"
-        tvNetworkQuality.text = "Signal Strength: ${cellSignalStrengthLte.dbm} dBm"
+        tvNetworkQuantity.text = "RSRP: ${cellSignalStrengthLte.rsrp} dbm"
+        tvNetworkQuality.text = "RSRQ: ${cellSignalStrengthLte.rsrq}"
     }
 
     private fun updateWcdmaCellInfo(cellInfo: CellInfoWcdma) {
@@ -151,6 +158,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
     override fun onLocationChanged(location: Location) {
         tvLatitude.text = "Latitude: ${location.latitude}"
         tvLongitude.text = "Longitude: ${location.longitude}"
+        eventTime.text = "Event Time: ${System.currentTimeMillis()}"
     }
 
     @RequiresApi(Build.VERSION_CODES.P)
@@ -161,4 +169,8 @@ class MainActivity : AppCompatActivity(), LocationListener {
             displayNetworkInfo()
         }
     }
+
+//    override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
+//    override fun onProviderEnabled(provider: String) {}
+//    override fun onProviderDisabled(provider: String) {}
 }

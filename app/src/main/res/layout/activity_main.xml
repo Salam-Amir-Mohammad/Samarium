@@ -27,7 +27,7 @@
         android:layout_margin="5dp"
         android:text="NetworkQuality"
         android:textSize="20dp"
-        app:layout_constraintStart_toEndOf="@+id/tv_NetworkType"
+        app:layout_constraintEnd_toEndOf="@+id/tv_NetworkType"
         app:layout_constraintTop_toBottomOf="@+id/tv_NetworkType" />
 
     <TextView
@@ -38,8 +38,8 @@
         android:layout_margin="5dp"
         android:text="NetworkQuantity"
         android:textSize="18dp"
-        app:layout_constraintEnd_toStartOf="@+id/tv_NetworkType"
-        app:layout_constraintTop_toBottomOf="@+id/tv_NetworkType" />
+        app:layout_constraintEnd_toEndOf="@+id/tv_NetworkQuality"
+        app:layout_constraintTop_toBottomOf="@+id/tv_NetworkQuality" />
 
     <TextView
         android:id="@+id/tv_Latitude"
@@ -48,7 +48,7 @@
         android:text="Latitude: "
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="@+id/tv_NetworkQuantity"
-        app:layout_constraintTop_toTopOf="@+id/tv_NetworkQuantity"
+        app:layout_constraintTop_toBottomOf="@+id/tv_NetworkQuantity"
         android:layout_margin="16dp"/>
 
     <TextView
@@ -59,6 +59,16 @@
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="@+id/tv_Latitude"
         app:layout_constraintTop_toBottomOf="@id/tv_Latitude"
+        android:layout_margin="16dp"/>
+
+    <TextView
+        android:id="@+id/tv_eventTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="EventTime: "
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/tv_Longitude"
+        app:layout_constraintTop_toBottomOf="@id/tv_Longitude"
         android:layout_margin="16dp"/>
 
     <TextView
