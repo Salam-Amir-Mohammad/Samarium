@@ -1,7 +1,9 @@
+package com.example.myapplication.database
+
+import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import android.content.Context
 
 @Database(entities = [NetworkInfo::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {

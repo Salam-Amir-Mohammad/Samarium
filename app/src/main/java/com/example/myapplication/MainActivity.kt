@@ -120,6 +120,13 @@ class MainActivity : AppCompatActivity(), LocationListener {
         val cellIdentityLte = cellInfo.cellIdentity
         val cellSignalStrengthLte = cellInfo.cellSignalStrength
 
+        val plmnId = "${cellIdentityLte.mccString}${cellIdentityLte.mncString}"
+        val tac = cellIdentityLte.tac?.toString()
+        val cellId = cellIdentityLte.ci?.toString()
+        val networkType = "4G (LTE)"
+        val networkQuantity = cellSignalStrengthLte.rsrq?.toString() ?: ""
+        val networkQuality = cellSignalStrengthLte.rsrp?.toString() ?: ""
+
         tvPLMNID.text = "PLMN-ID: ${cellIdentityLte.mccString}${cellIdentityLte.mncString}"
         tvTac.text = "TAC: ${cellIdentityLte.tac}"
         tvCellId.text = "Cell ID: ${cellIdentityLte.ci}"
@@ -127,32 +134,100 @@ class MainActivity : AppCompatActivity(), LocationListener {
 
         tvNetworkQuantity.text = "RSRP: ${cellSignalStrengthLte.rsrp} dbm"
         tvNetworkQuality.text = "RSRQ: ${cellSignalStrengthLte.rsrq}"
+
+        storeNetworkInfo(NetworkInfo(
+            eventTime = System.currentTimeMillis(),
+            latitude = tvLatitude.text.toString().substringAfter(": ").toDouble(),
+            longitude = tvLongitude.text.toString().substringAfter(": ").toDouble(),
+            cellTechnology = networkType,
+            cellId = cellId,
+            plmnId = plmnId,
+            rac = null,
+            tac = tac,
+            lac = null,
+            rsrq = networkQuantity.toIntOrNull(),
+            rsrp = networkQuality.toIntOrNull(),
+            rscp = null,
+            ecNo = null,
+            situation = "stationary" // Replace with actual situation
+        ))
     }
 
     private fun updateWcdmaCellInfo(cellInfo: CellInfoWcdma) {
         val cellIdentityWcdma = cellInfo.cellIdentity
         val cellSignalStrengthWcdma = cellInfo.cellSignalStrength
 
-        tvPLMNID.text = "PLMN-ID: ${cellIdentityWcdma.mccString}${cellIdentityWcdma.mncString}"
-        tvLac.text = "LAC: ${cellIdentityWcdma.lac}"
-        tvCellId.text = "Cell ID: ${cellIdentityWcdma.cid}"
-        tvNetworkType.text = "3G (WCDMA)"
+        val plmnId = "${cellIdentityWcdma.mccString}${cellIdentityWcdma.mncString}"
+        val lac = cellIdentityWcdma.lac?.toString()
+        val cellId = cellIdentityWcdma.cid?.toString()
+        val networkType = "3G (WCDMA)"
+        val networkQuantity = cellSignalStrengthWcdma.dbm.toString()
+        val networkQuality = cellSignalStrengthWcdma.ecno.toString()
 
-        tvNetworkQuantity.text = "RSCP: ${cellSignalStrengthWcdma.dbm}"
-        tvNetworkQuality.text = "Signal Strength: ${cellSignalStrengthWcdma.dbm} dBm"
+        tvPLMNID.text = "PLMN-ID: $plmnId"
+        tvLac.text = "LAC: $lac"
+        tvCellId.text = "Cell ID: $cellId"
+        tvNetworkType.text = networkType
+        tvNetworkQuantity.text = "RSCP: $networkQuantity dbm"
+        tvNetworkQuality.text = "Ec/No: $networkQuality"
+
+        storeNetworkInfo(NetworkInfo(
+            eventTime = System.currentTimeMillis(),
+            latitude = tvLatitude.text.toString().substringAfter(": ").toDouble(),
+            longitude = tvLongitude.text.toString().substringAfter(": ").toDouble(),
+            cellTechnology = networkType,
+            cellId = cellId,
+            plmnId = plmnId,
+            rac = null,
+            tac = null,
+            lac = lac,
+            rsrq = null,
+            rsrp = null,
+            rscp = networkQuantity.toIntOrNull(),
+            ecNo = networkQuality.toIntOrNull(),
+            situation = "stationary" // Replace with actual situation
+        ))
     }
 
     private fun updateGsmCellInfo(cellInfo: CellInfoGsm) {
         val cellIdentityGsm = cellInfo.cellIdentity
         val cellSignalStrengthGsm = cellInfo.cellSignalStrength
 
-        tvPLMNID.text = "PLMN-ID: ${cellIdentityGsm.mccString}${cellIdentityGsm.mncString}"
-        tvLac.text = "LAC: ${cellIdentityGsm.lac}"
-        tvCellId.text = "Cell ID: ${cellIdentityGsm.cid}"
-        tvNetworkType.text = "2G (GSM)"
+        val plmnId = "${cellIdentityGsm.mccString}${cellIdentityGsm.mncString}"
+        val lac = cellIdentityGsm.lac?.toString()
+        val cellId = cellIdentityGsm.cid?.toString()
+        val networkType = "2G (GSM)"
+        val networkQuantity = cellSignalStrengthGsm.dbm.toString()
 
-        tvNetworkQuantity.text = "RSSI: ${cellSignalStrengthGsm.dbm}"
-        tvNetworkQuality.text = "Signal Strength: ${cellSignalStrengthGsm.dbm} dBm"
+        tvPLMNID.text = "PLMN-ID: $plmnId"
+        tvLac.text = "LAC: $lac"
+        tvCellId.text = "Cell ID: $cellId"
+        tvNetworkType.text = networkType
+        tvNetworkQuantity.text = "RSSI: $networkQuantity"
+        tvNetworkQuality.text = "Signal Strength: $networkQuantity dBm"
+
+        storeNetworkInfo(NetworkInfo(
+            eventTime = System.currentTimeMillis(),
+            latitude = tvLatitude.text.toString().substringAfter(": ").toDouble(),
+            longitude = tvLongitude.text.toString().substringAfter(": ").toDouble(),
+            cellTechnology = networkType,
+            cellId = cellId,
+            plmnId = plmnId,
+            rac = null,
+            tac = null,
+            lac = lac,
+            rsrq = null,
+            rsrp = null,
+            rscp = null,
+            ecNo = null,
+            situation = "stationary" // Replace with actual situation
+        ))
+    }
+
+    private fun storeNetworkInfo(networkInfo: NetworkInfo) {
+        lifecycleScope.launch {
+            database.networkInfoDao().insert(networkInfo)
+        }
     }
 
     override fun onLocationChanged(location: Location) {
