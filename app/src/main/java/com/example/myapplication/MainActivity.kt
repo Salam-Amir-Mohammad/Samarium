@@ -1,6 +1,5 @@
 package com.example.myapplication
 
-
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
@@ -15,9 +14,9 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.lifecycleScope
-import com.example.myapplication.database.AppDatabase
 import com.example.myapplication.database.NetworkInfo
+import com.example.myapplication.database.NetworkInfoDatabaseHelper
+import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import android.telephony.CellInfoWcdma
 import android.telephony.CellSignalStrengthWcdma
@@ -38,7 +37,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
 
     private lateinit var locationManager: LocationManager
     private lateinit var telephonyManager: TelephonyManager
-    private lateinit var database: AppDatabase
+    private lateinit var databaseHelper: NetworkInfoDatabaseHelper
 
     companion object {
         private const val PERMISSION_REQUEST_CODE = 1
@@ -63,7 +62,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
 
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         telephonyManager = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-        database = AppDatabase.getDatabase(this)
+        databaseHelper = NetworkInfoDatabaseHelper(this)
 
         if (!hasRequiredPermissions()) {
             requestPermissions()
@@ -173,7 +172,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
             rsrp = networkQuality.toIntOrNull(),
             rscp = null,
             ecNo = null,
-            qualityOfService = calculateQualityOfService(networkQuality) // Replace with actual situation
+            qos = calculateQualityOfService(networkQuality) // Replace with actual situation
         ))
     }
 
@@ -209,7 +208,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
             rsrp = null,
             rscp = networkQuantity.toIntOrNull(),
             ecNo = networkQuality.toIntOrNull(),
-            qualityOfService = calculateQualityOfService(networkQuality) // Replace with actual situation
+            qos = calculateQualityOfService(networkQuality) // Replace with actual situation
         ))
     }
 
@@ -244,7 +243,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
             rsrp = null,
             rscp = null,
             ecNo = null,
-            qualityOfService = calculateQualityOfService(networkQuantity) // Replace with actual situation
+            qos = calculateQualityOfService(networkQuantity) // Replace with actual situation
         ))
     }
 
@@ -266,7 +265,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
 
     private fun storeNetworkInfo(networkInfo: NetworkInfo) {
         lifecycleScope.launch {
-            database.networkInfoDao().insert(networkInfo)
+            databaseHelper.insertInfo(networkInfo)
         }
     }
 
