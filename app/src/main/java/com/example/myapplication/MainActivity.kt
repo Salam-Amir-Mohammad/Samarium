@@ -39,11 +39,23 @@ class MainActivity : AppCompatActivity(), LocationListener {
         private const val LOCATION_UPDATE_INTERVAL = 5000L // 5 seconds
     }
 
-    @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        tvNetworkType = findViewById(R.id.tv_NetworkType)
+        tvNetworkQuality = findViewById(R.id.tv_NetworkQuality)
+        tvNetworkQuantity = findViewById(R.id.tv_NetworkQuantity)
+        tvLatitude = findViewById(R.id.tv_Latitude)
+        tvLongitude = findViewById(R.id.tv_Longitude)
+        tvTac = findViewById(R.id.tv_Tac)
+        tvLac = findViewById(R.id.tv_Lac)
+        tvRac = findViewById(R.id.tv_Rac)
+        tvPLMNID = findViewById(R.id.tv_PLMNID)
+        tvCellId = findViewById(R.id.tv_CellId)
+
+        locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        telephonyManager = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
     }
 
 }
