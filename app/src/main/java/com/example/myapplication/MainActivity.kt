@@ -58,4 +58,32 @@ class MainActivity : AppCompatActivity(), LocationListener {
         telephonyManager = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
     }
 
+    private fun hasRequiredPermissions(): Boolean {
+        val permissions = arrayOf(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.READ_PHONE_STATE
+        )
+        return permissions.all { ContextCompat.checkSelfPermission(this, it) == PackageManager.PERMISSION_GRANTED }
+    }
+
+    private fun requestPermissions() {
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.READ_PHONE_STATE
+            ),
+            PERMISSION_REQUEST_CODE
+        )
+    }
+
+    @RequiresApi(Build.VERSION_CODES.P)
+    private fun startLocationUpdates() {
+        if (hasRequiredPermissions()) {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, LOCATION_UPDATE_INTERVAL, 0f, this)
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, LOCATION_UPDATE_INTERVAL, 0f, this)
+        }
+    }
 }
