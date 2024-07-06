@@ -19,5 +19,6 @@ data class NetworkInfo(
     val rsrp: Int?,
     val rscp: Int?,
     val ecNo: Int?,
-    val qualityOfService: String
+    val qualityOfService: String,
+    val batchId: Int
 )

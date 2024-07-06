@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp">
+
+    <TextView
+        android:id="@+id/eventTimeTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Event Time"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/latitudeTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Latitude"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/eventTimeTextView"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/longitudeTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Longitude"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/latitudeTextView"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/cellTechnologyTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Cell Technology"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/longitudeTextView"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+
+    <TextView
+        android:id="@+id/cellIdTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cellTechnologyTextView"
+        android:textColor="@android:color/black"/>
+
+    <TextView
+        android:id="@+id/plmnIdTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cellIdTextView"
+        android:textColor="@android:color/black"/>
+
+    <TextView
+        android:id="@+id/racTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/plmnIdTextView"
+        android:textColor="@android:color/black"/>
+
+    <TextView
+        android:id="@+id/tacTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/racTextView"
+        android:textColor="@android:color/black"/>
+
+    <TextView
+        android:id="@+id/lacTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tacTextView"
+        android:textColor="@android:color/black"/>
+
+    <TextView
+        android:id="@+id/rsrqTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/lacTextView"
+        android:textSize="14sp"
+        android:textColor="@android:color/black"/>
+
+    <TextView
+        android:id="@+id/rsrpTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rsrqTextView"
+        android:textSize="14sp"
+        android:textColor="@android:color/black"/>
+
+    <TextView
+        android:id="@+id/rscpTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rsrpTextView"
+        android:textSize="14sp"
+        android:textColor="@android:color/black"/>
+
+    <TextView
+        android:id="@+id/ecNoTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rscpTextView"
+        android:textSize="14sp"
+        android:textColor="@android:color/black"/>
+
+    <TextView
+        android:id="@+id/qualityOfServiceTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ecNoTextView"
+        android:textSize="14sp"
+        android:textColor="@android:color/black"/>
+
+    <TextView
+        android:id="@+id/batchIdTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/qualityOfServiceTextView"
+        android:textColor="@android:color/black"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,8 +4,11 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
+import com.example.myapplication.BatchDetailActivity
 
-@Database(entities = [NetworkInfo::class], version = 1)
+@Database(entities = [NetworkInfo::class], version = 2)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun networkInfoDao(): NetworkInfoDao
 
@@ -19,9 +22,15 @@ abstract class AppDatabase : RoomDatabase() {
                     context.applicationContext,
                     AppDatabase::class.java,
                     "network_info_database"
-                ).build()
+                ).addMigrations(MIGRATION_1_2).build()
                 INSTANCE = instance
                 instance
+            }
+        }
+        private val MIGRATION_1_2: Migration = object : Migration(1, 2) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                // اجرای دستورات SQL برای اضافه کردن ستون batchId
+                database.execSQL("ALTER TABLE network_info ADD COLUMN batchId INTEGER DEFAULT 0 NOT NULL")
             }
         }
     }
