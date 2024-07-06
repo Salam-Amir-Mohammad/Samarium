@@ -334,7 +334,15 @@ class MainActivity : AppCompatActivity() {
             for (networkInfo in networkInfoList) {
                 if(collectingData)
                 {
-                    database.networkInfoDao().insert(networkInfo)
+                    val count = database.networkInfoDao().countByBatchAndLocation(
+                        networkInfo.batchId,
+                        networkInfo.latitude,
+                        networkInfo.longitude
+                    )
+                    if(count == 0)
+                    {
+                        database.networkInfoDao().insert(networkInfo)
+                    }
                 }
             }
         }

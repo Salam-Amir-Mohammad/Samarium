@@ -9,6 +9,8 @@ import com.example.myapplication.MainActivity
 interface NetworkInfoDao {
     @Insert
     suspend fun insert(networkInfo: NetworkInfo)
+    @Query("SELECT COUNT(*) FROM network_info WHERE batchId = :batchId AND latitude = :latitude AND longitude = :longitude")
+    fun countByBatchAndLocation(batchId: Int, latitude: Double, longitude: Double): Int
 
     @Query("SELECT * FROM network_info")
     suspend fun getAll(): List<NetworkInfo>
